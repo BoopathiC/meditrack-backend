@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import apiRoutes from '../routes/index.js';
+import apiRoutes from './meditrack-backend/routes/index.js';
 
 dotenv.config();
 
