@@ -3,58 +3,24 @@ import Appointment from '../models/Appointment.js';
 
 const router = express.Router();
 
-// Create a new appointment
 router.post('/', async (req, res) => {
   try {
-    const newAppointment = new Appointment(req.body);
-    const savedAppointment = await newAppointment.save();
-    res.status(201).json(savedAppointment);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    const appointment = new Appointment(req.body);
+    const saved = await appointment.save();
+    res.status(201).json(saved);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 });
 
-// Get all appointments
 router.get('/', async (req, res) => {
-  try {
-    const appointments = await Appointment.find();
-    res.status(200).json(appointments);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+  const data = await Appointment.find().sort({ createdAt: -1 });
+  res.json(data);
 });
 
-// Get a single appointment by ID
-router.get('/:id', async (req, res) => {
-  try {
-    const appointment = await Appointment.findById(req.params.id);
-    if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
-    res.status(200).json(appointment);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Update an appointment by ID
-router.put('/:id', async (req, res) => {
-  try {
-    const updatedAppointment = await Appointment.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedAppointment) return res.status(404).json({ message: 'Appointment not found' });
-    res.status(200).json(updatedAppointment);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Delete an appointment by ID
 router.delete('/:id', async (req, res) => {
-  try {
-    const deletedAppointment = await Appointment.findByIdAndDelete(req.params.id);
-    if (!deletedAppointment) return res.status(404).json({ message: 'Appointment not found' });
-    res.status(200).json({ message: 'Appointment deleted' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+  await Appointment.findByIdAndDelete(req.params.id);
+  res.json({ message: 'Deleted' });
 });
 
 export default router;

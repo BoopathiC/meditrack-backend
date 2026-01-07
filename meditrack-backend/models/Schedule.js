@@ -7,7 +7,7 @@ const scheduleSchema = new mongoose.Schema({
   sessionDetails: {
     date: { type: Date, required: true },
     time: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String, default: 'N/A' },
     location: { type: String },
     status: { type: String, enum: ['Pending', 'Confirmed', 'Cancelled'], default: 'Pending' },
   },

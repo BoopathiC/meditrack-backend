@@ -1,31 +1,22 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import routes from './routes/index.js';
 import dotenv from 'dotenv';
+import apiRoutes from './routes/index.js';
 
 dotenv.config();
 
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 50000,
-    socketTimeoutMS: 45000,
-  })
-  .then(() => console.log('Db connected'))
-  .catch((err) => {
-    console.error('Connection error', err);
-    process.exit(1);
-  });
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ MongoDB Connected'))
+  .catch(err => console.error('❌ Mongo Error:', err));
 
-app.use('/api', routes);
+app.use('/api', apiRoutes);
 
-const PORT = process.env.PORT || 3008;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(5000, () => {
+  console.log('🚀 Server running on http://localhost:5000');
 });

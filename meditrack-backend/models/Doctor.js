@@ -17,12 +17,10 @@ const doctorSchema = new mongoose.Schema({
     trim: true
   },
   availability: {
-    type: String, // You can change this to an array of strings or a more complex structure if needed
+    type: String,
     required: true,
     trim: true
   }
-});
+}, { timestamps: true });
 
-const Doctor = mongoose.model('Doctor', doctorSchema);
-
-export default Doctor;
+export default mongoose.model('Doctor', doctorSchema);

@@ -16,13 +16,40 @@ router.get('/', async (req, res) => {
 // POST a new schedule
 router.post('/', async (req, res) => {
   try {
-    const newSchedule = new Schedule(req.body);
+    const {
+      number,
+      patientName,
+      doctor,
+      sessionDetails
+    } = req.body;
+
+    if (
+      !number ||
+      !patientName ||
+      !doctor ||
+      !sessionDetails?.date ||
+      !sessionDetails?.time ||
+      !sessionDetails?.description
+    ) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    const newSchedule = new Schedule({
+      number,
+      patientName,
+      doctor,
+      sessionDetails
+    });
+
     await newSchedule.save();
-    res.json(newSchedule);
+    res.status(201).json(newSchedule);
+
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: error.message });
   }
 });
+
 
 // PUT (edit) an existing schedule by ID
 router.put('/:id', async (req, res) => {
